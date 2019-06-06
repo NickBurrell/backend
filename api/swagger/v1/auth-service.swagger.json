@@ -1,0 +1,163 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Authentication service",
+    "version": "1.0",
+    "contact": {
+      "name": "auth-service",
+      "url": "https://gitlab.com/zero_frost/auth-service",
+      "email": "zero_frost@protonmail.com"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/auth": {
+      "post": {
+        "operationId": "CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string"
+        },
+        "error_code": {
+          "$ref": "#/definitions/v1CreateUserResponseErrorCode"
+        }
+      }
+    },
+    "v1CreateUserResponseErrorCode": {
+      "type": "string",
+      "enum": [
+        "BAD_REQUEST",
+        "INTERNAL_ERROR",
+        "INVALID_EMAIL",
+        "INVALID_USERNAME",
+        "INVALID_PASSWORD",
+        "BLANK_USERNAME",
+        "BLANK_PASSWORD"
+      ],
+      "default": "BAD_REQUEST"
+    },
+    "v1LoginRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "v1LoginResponse": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "type": "string"
+        },
+        "opaque_token": {
+          "type": "string"
+        },
+        "error_code": {
+          "$ref": "#/definitions/v1LoginResponseErrorCode"
+        }
+      }
+    },
+    "v1LoginResponseErrorCode": {
+      "type": "string",
+      "enum": [
+        "BAD_REQUEST",
+        "INTERNAL_ERROR",
+        "INCORRECT_USERNAME_OR_PASSWORD",
+        "BLANK_USERNAME",
+        "BLANK_PASSWORD"
+      ],
+      "default": "BAD_REQUEST"
+    }
+  }
+}

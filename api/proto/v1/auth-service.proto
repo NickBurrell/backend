@@ -1,0 +1,89 @@
+syntax = "proto3";
+package auth.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (
+    grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+        info: {
+            title: "Authentication service";
+            version: "1.0";
+            contact: {
+                name: "auth-service";
+                url: "https://gitlab.com/zero_frost/auth-service";
+                email: "zero_frost@protonmail.com";
+            };
+        };
+        schemes: HTTP;
+        consumes: "application/json";
+        produces: "application/json";
+        responses: {
+        key: "404";
+        value: {
+            description: "Returned when the resource does not exist.";
+            schema: {
+                json_schema: {
+                    type: STRING;
+                }
+            }
+        }
+    }
+};
+
+
+option go_package = "v1";
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+     enum ErrorCode {
+        BAD_REQUEST = 0;
+        INTERNAL_ERROR = 1;
+        INCORRECT_USERNAME_OR_PASSWORD = 2;
+        BLANK_USERNAME = 3;
+        BLANK_PASSWORD = 4;
+    }
+    string api = 1;
+    string opaque_token = 2;
+    ErrorCode error_code = 3;
+}
+
+message CreateUserRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message CreateUserResponse {
+    enum ErrorCode {
+        BAD_REQUEST = 0;
+        INTERNAL_ERROR = 1;
+        INVALID_EMAIL = 2;
+        INVALID_USERNAME = 3;
+        INVALID_PASSWORD = 4;
+        BLANK_USERNAME = 5;
+        BLANK_PASSWORD = 6;
+    }
+    string api = 1;
+    ErrorCode error_code = 2;
+}
+
+service Auth {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+                                   post: "/v1/auth"
+                                   body: "*"
+        };
+    }
+
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        option (google.api.http) = {
+                                    post: "/v1/auth/login"
+                                    body: "*"
+        };
+    }
+}
