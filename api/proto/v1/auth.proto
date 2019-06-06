@@ -1,0 +1,49 @@
+syntax = "proto3";
+package auth.v1;
+
+option go_package = "v1";
+
+// message AuthRequest {
+//     string username = 1;
+//     string password = 2;
+// }
+
+message AuthRequest {
+    string Token = 1;
+}
+
+// message AuthResponse {
+//     enum Status {
+//         APPROVED = 0;
+//         UNAUTHORIZED = 1;
+//         ERROR = 2;
+//     }
+//     enum ErrorCode {
+//         INTERNAL_SERVER = 0;
+//         BAD_REQUEST = 1;
+//         PERMISSION = 2;
+//     }
+//     string Token = 1;
+//     Status status = 2;
+//     ErrorCode error_code = 3;
+// }
+
+message AuthResponse {
+    enum Status {
+        APPROVED = 0;
+        UNAUTHORIZED = 1;
+        ERROR = 2;
+    }
+    enum ErrorCode {
+        INTERNAL_SERVER = 0;
+        BAD_REQUEST = 1;
+        PERMISSION = 2;
+    }
+    Status status = 1;
+    ErrorCode error_code = 2;
+}
+
+
+service Auth {
+  rpc CheckAuth(AuthRequest) returns (AuthResponse) {}
+}
