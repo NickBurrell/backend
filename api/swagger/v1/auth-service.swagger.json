@@ -105,6 +105,10 @@
         "api": {
           "type": "string"
         },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
         "error_code": {
           "$ref": "#/definitions/v1CreateUserResponseErrorCode"
         }
@@ -117,7 +121,8 @@
         "INTERNAL_ERROR",
         "INVALID_EMAIL",
         "INVALID_USERNAME",
-        "INVALID_PASSWORD",
+        "USERNAME_TAKEN",
+        "EMAIL_TAKEN",
         "BLANK_USERNAME",
         "BLANK_PASSWORD"
       ],

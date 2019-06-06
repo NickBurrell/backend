@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-redis/redis"
@@ -12,8 +11,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/net/context"
 	"log"
-	"os"
-	"os/user"
 	"regexp"
 	"time"
 )
@@ -40,15 +37,20 @@ type Claims struct {
 }
 
 type Server struct {
-	db    *models.Datastore
+	db    *gorm.DB
 	cache *redis.Client
 }
 
-func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginResponse, error) {
-	user := models.User{
-		Username: in.Username,
+func NewServer(db *gorm.DB, client *redis.Client) *Server {
+	return &Server{
+		db:    db,
+		cache: client,
 	}
-	if err := s.db.GetUser(&user); err != nil {
+}
+
+func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginResponse, error) {
+	var user models.User
+	if err := s.db.Where("username = ?", in.Username).First(&user).Error; err != nil {
 		switch err.Error() {
 		case gorm.ErrRecordNotFound.Error():
 			{
@@ -92,57 +94,59 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	}
 
 	for _, elem := range user.Roles {
-		userData.Roles = append(userData.Roles, elem.ResourceID)
+		userData.Roles = append(userData.Roles, elem.RoleID)
 	}
 
 	for _, elem := range user.Permissions {
-		userData.Permissions = append(userData.Permissions, elem.ResourceID)
+		userData.Permissions = append(userData.Permissions, elem.PermissionID)
 	}
 
 	claims := Claims{
-		jwt.StandardClaims{
+		StandardClaims: jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),
-			ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
+			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
 			Issuer:    "Authentication Server",
 		},
-		userInfo,
+		UserInfo: userData,
 	}
 
-	var path string
-	{
-		usr, err := user.Current()
-		if err != nil {
-			return &v1.LoginResponse{
-				Api:       "v1",
-				ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
-			}, fmt.Errorf("error: could not load secret")
-		}
-		path = user.HomeDir
-	}
-	file, err := os.Open(path + ".auth-server/secret.json")
-	if err != nil {
-		if err != nil {
-			return &v1.LoginResponse{
-				Api:       "v1",
-				ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
-			}, fmt.Errorf("error: could not load secret")
-		}
-	}
-	var secret map[string]interface{}
-	if err := json.NewDecoder(file).Decode(&secret); err != nil {
-		return &v1.LoginResponse{
-			Api:       "v1",
-			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
-		}, fmt.Errorf("error: could not load secret")
-	}
-	if ok, _ := secret["jwt_secret"]; !ok {
-		return &v1.LoginResponse{
-			Api:       "v1",
-			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
-		}, fmt.Errorf("error: could not load secret")
-	}
+	// var path string
+	// {
+	// 	usr, err := user.Current()
+	// 	if err != nil {
+	// 		return &v1.LoginResponse{
+	// 			Api:       "v1",
+	// 			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
+	// 		}, fmt.Errorf("error: could not load secret")
+	// 	}
+	// 	path = user.HomeDir
+	// }
+	// file, err := os.Open(path + ".auth-server/secret.json")
+	// if err != nil {
+	// 	if err != nil {
+	// 		return &v1.LoginResponse{
+	// 			Api:       "v1",
+	// 			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
+	// 		}, fmt.Errorf("error: could not load secret")
+	// 	}
+	// }
+	// var secret map[string]interface{}
+	// if err := json.NewDecoder(file).Decode(&secret); err != nil {
+	// 	return &v1.LoginResponse{
+	// 		Api:       "v1",
+	// 		ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
+	// 	}, fmt.Errorf("error: could not load secret")
+	// }
+	// if _, ok := secret["jwt_secret"]; !ok {
+	// 	return &v1.LoginResponse{
+	// 		Api:       "v1",
+	// 		ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
+	// 	}, fmt.Errorf("error: could not load secret")
+	// }
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenstring, err := token.SignedString(secret[jwt_secret])
+	// tokenstring, err := token.SignedString(secret["jwt_secret"])
+	tokenstring, err := token.SignedString(jwtKey)
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
@@ -158,14 +162,67 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 		}, fmt.Errorf("error: failed to generate user token")
 	}
 
-	s.cache.Set(string(opaqueToken), tokenstring, claims.ExpiresAt)
-
+	s.cache.Set(opaqueToken.String(), tokenstring, time.Unix(claims.ExpiresAt, 0).Sub(time.Now()))
+	// log.Printf("%s", exp.Unix()-time.Now().Unix())
 	return &v1.LoginResponse{
 		Api:         "v1",
-		opaqueToken: opaqueToken,
-	}
+		OpaqueToken: opaqueToken.String(),
+	}, nil
 
 }
 
 func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
+	var users []models.User
+	if err := s.db.Where("username = ? OR email = ?", in.Username, in.Email).Find(&users).Error; len(users) != 0 {
+		for _, elem := range users {
+			if elem.Username == in.Username {
+				return &v1.CreateUserResponse{
+					Api:       "v1",
+					ErrorCode: v1.CreateUserResponse_USERNAME_TAKEN,
+				}, fmt.Errorf("error: username already taken")
+			} else if elem.Email == in.Email {
+				return &v1.CreateUserResponse{
+					Api:       "v1",
+					ErrorCode: v1.CreateUserResponse_EMAIL_TAKEN,
+				}, fmt.Errorf("error: email already in use")
+			}
+		}
+	} else if err != nil && err.Error() != "record not found" {
+		return &v1.CreateUserResponse{
+			Api:       "v1",
+			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
+		}, fmt.Errorf("error: internal error")
+	}
+
+	if !validateEmail(in.Email) {
+		return &v1.CreateUserResponse{
+			Api:       "v1",
+			ErrorCode: v1.CreateUserResponse_INVALID_EMAIL,
+		}, fmt.Errorf("error: invalid email")
+	}
+
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(in.Password), bcrypt.MinCost)
+	if err != nil {
+		return &v1.CreateUserResponse{
+			Api:       "v1",
+			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
+		}, fmt.Errorf("error: failed to hash password")
+	}
+
+	if err := s.db.Create(&models.User{
+		Username: in.Username,
+		Email:    in.Email,
+		Password: string(passwordHash),
+	}).Error; err != nil {
+		return &v1.CreateUserResponse{
+			Api:       "v1",
+			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
+		}, fmt.Errorf("error: failed to create new user entry")
+	}
+
+	log.Printf("Sucessfully created user %s", in.Username)
+	return &v1.CreateUserResponse{
+		Api:     "v1",
+		Success: true,
+	}, nil
 }

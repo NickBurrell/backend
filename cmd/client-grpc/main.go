@@ -5,7 +5,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
-	"os"
 )
 
 func main() {
@@ -18,15 +17,27 @@ func main() {
 	defer conn.Close()
 
 	c := v1.NewAuthClient(conn)
-
-	response, err := c.CheckAuth(context.Background(), &v1.AuthRequest{Token: os.Args[1]})
+	response, err := c.Login(context.Background(), &v1.LoginRequest{
+		Username: "test",
+		Password: "test1234",
+	})
 	if err != nil {
 		log.Fatalf("Error when calling CheckAuth: %s", err)
 	}
-	switch response.Status {
-	case v1.AuthResponse_APPROVED:
-		log.Printf("Success!")
-	default:
-		log.Fatalf("Failure!")
-	}
+
+	log.Printf("%s", response.OpaqueToken)
+	// response, err := c.CreateUser(context.Background(), &v1.CreateUserRequest{
+	// 	Username: "test",
+	// 	Email:    "test@gmail.com",
+	// 	Password: "test1234",
+	// })
+	// if err != nil {
+	// 	log.Fatalf("Error when calling CheckAuth: %s", err)
+	// }
+	// switch response.ErrorCode {
+	// case v1.CreateUserResponse_INTERNAL_ERROR:
+	// 	log.Printf("Failure!")
+	// default:
+	// 	log.Fatalf("SUCCESS!")
+	// }
 }
