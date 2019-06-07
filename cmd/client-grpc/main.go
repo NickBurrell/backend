@@ -17,27 +17,27 @@ func main() {
 	defer conn.Close()
 
 	c := v1.NewAuthClient(conn)
-	response, err := c.Login(context.Background(), &v1.LoginRequest{
-		Username: "test",
-		Password: "test1234",
-	})
-	if err != nil {
-		log.Fatalf("Error when calling CheckAuth: %s", err)
-	}
-
-	log.Printf("%s", response.OpaqueToken)
-	// response, err := c.CreateUser(context.Background(), &v1.CreateUserRequest{
+	// response, err := c.Login(context.Background(), &v1.LoginRequest{
 	// 	Username: "test",
-	// 	Email:    "test@gmail.com",
 	// 	Password: "test1234",
 	// })
 	// if err != nil {
 	// 	log.Fatalf("Error when calling CheckAuth: %s", err)
 	// }
-	// switch response.ErrorCode {
-	// case v1.CreateUserResponse_INTERNAL_ERROR:
-	// 	log.Printf("Failure!")
-	// default:
-	// 	log.Fatalf("SUCCESS!")
-	// }
+
+	// log.Printf("%s", response.OpaqueToken)
+	response, err := c.CreateUser(context.Background(), &v1.CreateUserRequest{
+		Username: "test",
+		Email:    "test@gmail.com",
+		Password: "test1234",
+	})
+	if err != nil {
+		log.Fatalf("Error when calling CheckAuth: %s", err)
+	}
+	switch response.ErrorCode {
+	case v1.CreateUserResponse_INTERNAL_ERROR:
+		log.Printf("Failure!")
+	default:
+		log.Fatalf("SUCCESS!")
+	}
 }

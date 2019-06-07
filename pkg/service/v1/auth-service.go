@@ -3,9 +3,7 @@ package v1
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
-	"github.com/satori/go.uuid"
 	"gitlab.com/zero_frost/auth-service/models"
 	"gitlab.com/zero_frost/auth-service/pkg/api/v1"
 	"golang.org/x/crypto/bcrypt"
@@ -37,14 +35,12 @@ type Claims struct {
 }
 
 type Server struct {
-	db    *gorm.DB
-	cache *redis.Client
+	db *gorm.DB
 }
 
-func NewServer(db *gorm.DB, client *redis.Client) *Server {
+func NewAuthServer(db *gorm.DB) *Server {
 	return &Server{
-		db:    db,
-		cache: client,
+		db: db,
 	}
 }
 
@@ -144,9 +140,10 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	// 	}, fmt.Errorf("error: could not load secret")
 	// }
 
+	// jwt, err := token.SignedString(secret["jwt_secret"])
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// tokenstring, err := token.SignedString(secret["jwt_secret"])
-	tokenstring, err := token.SignedString(jwtKey)
+	jwt, err := token.SignedString(jwtKey)
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
@@ -154,7 +151,6 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 		}, fmt.Errorf("error: failed to encode JWT")
 	}
 
-	opaqueToken, err := uuid.NewV4()
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
@@ -162,13 +158,10 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 		}, fmt.Errorf("error: failed to generate user token")
 	}
 
-	s.cache.Set(opaqueToken.String(), tokenstring, time.Unix(claims.ExpiresAt, 0).Sub(time.Now()))
-	// log.Printf("%s", exp.Unix()-time.Now().Unix())
 	return &v1.LoginResponse{
-		Api:         "v1",
-		OpaqueToken: opaqueToken.String(),
+		Api:   "v1",
+		Token: jwt,
 	}, nil
-
 }
 
 func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
@@ -183,7 +176,7 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 			} else if elem.Email == in.Email {
 				return &v1.CreateUserResponse{
 					Api:       "v1",
-					ErrorCode: v1.CreateUserResponse_EMAIL_TAKEN,
+					ErrorCode: v1.CreateUserResponse_EMAIL_IN_USE,
 				}, fmt.Errorf("error: email already in use")
 			}
 		}

@@ -88,6 +88,9 @@
     "v1CreateUserRequest": {
       "type": "object",
       "properties": {
+        "api": {
+          "type": "string"
+        },
         "email": {
           "type": "string"
         },
@@ -122,7 +125,7 @@
         "INVALID_EMAIL",
         "INVALID_USERNAME",
         "USERNAME_TAKEN",
-        "EMAIL_TAKEN",
+        "EMAIL_IN_USE",
         "BLANK_USERNAME",
         "BLANK_PASSWORD"
       ],
@@ -131,6 +134,9 @@
     "v1LoginRequest": {
       "type": "object",
       "properties": {
+        "api": {
+          "type": "string"
+        },
         "username": {
           "type": "string"
         },
@@ -145,7 +151,7 @@
         "api": {
           "type": "string"
         },
-        "opaque_token": {
+        "token": {
           "type": "string"
         },
         "error_code": {

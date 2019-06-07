@@ -35,8 +35,9 @@ option (
 option go_package = "v1";
 
 message LoginRequest {
-    string username = 1;
-    string password = 2;
+    string api = 1;
+    string username = 2;
+    string password = 3;
 }
 
 message LoginResponse {
@@ -48,14 +49,15 @@ message LoginResponse {
         BLANK_PASSWORD = 4;
     }
     string api = 1;
-    string opaque_token = 2;
+    string token = 2;
     ErrorCode error_code = 3;
 }
 
 message CreateUserRequest {
-    string email = 1;
-    string username = 2;
-    string password = 3;
+    string api = 1;
+    string email = 2;
+    string username = 3;
+    string password = 4;
 }
 
 message CreateUserResponse {
