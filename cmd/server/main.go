@@ -6,10 +6,10 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"gitlab.com/zero_frost/auth-service/models"
-	"gitlab.com/zero_frost/auth-service/pkg/protocol/grpc"
-	"gitlab.com/zero_frost/auth-service/pkg/protocol/http"
-	"gitlab.com/zero_frost/auth-service/pkg/service/v1"
+	"github.com/zero-frost/auth-service/models"
+	"github.com/zero-frost/auth-service/pkg/protocol/grpc"
+	"github.com/zero-frost/auth-service/pkg/protocol/http"
+	"github.com/zero-frost/auth-service/pkg/service/v1"
 )
 
 func main() {

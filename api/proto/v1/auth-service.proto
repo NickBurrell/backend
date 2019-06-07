@@ -11,7 +11,7 @@ option (
             version: "1.0";
             contact: {
                 name: "auth-service";
-                url: "https://gitlab.com/zero_frost/auth-service";
+                url: "https://github.com/zero-frost/auth-service";
                 email: "zero_frost@protonmail.com";
             };
         };

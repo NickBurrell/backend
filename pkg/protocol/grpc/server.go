@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"gitlab.com/zero_frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/auth-service/pkg/api/v1"
 )
 
 func RunServer(ctx context.Context, healthAPI v1.HealthServer, v1API v1.AuthServer, port string) error {

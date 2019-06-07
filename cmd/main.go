@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"gitlab.com/zero_frost/auth-service/pkg/protocol/grpc"
-	"gitlab.com/zero_frost/auth-service/pkg/service/v1"
+	"github.com/zero-frost/auth-service/pkg/protocol/grpc"
+	"github.com/zero-frost/auth-service/pkg/service/v1"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitlab.com/zero_frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/auth-service/pkg/api/v1"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"log"
