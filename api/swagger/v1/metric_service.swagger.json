@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Authentication service",
+    "version": "1.0",
+    "contact": {
+      "name": "auth-service",
+      "url": "https://github.com/zero-frost/auth-service",
+      "email": "zero_frost@protonmail.com"
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/metrics": {
+      "get": {
+        "operationId": "GetMetrics",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MetricsResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "format": "string"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "api",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Metric"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "MetricsResponseErrorCode": {
+      "type": "string",
+      "enum": [
+        "INTERNAL_ERROR",
+        "ENCODING_ERROR"
+      ],
+      "default": "INTERNAL_ERROR"
+    },
+    "MetricsResponseMetric": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "v1MetricsResponse": {
+      "type": "object",
+      "properties": {
+        "error_code": {
+          "$ref": "#/definitions/MetricsResponseErrorCode"
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MetricsResponseMetric"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+syntax = "proto3";
+package auth.v1;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (
+    grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+        info: {
+            title: "Authentication service";
+            version: "1.0";
+            contact: {
+                name: "auth-service";
+                url: "https://github.com/zero-frost/auth-service";
+                email: "zero_frost@protonmail.com";
+            };
+        };
+        schemes: HTTP;
+        consumes: "application/json";
+        produces: "application/json";
+        responses: {
+        key: "404";
+        value: {
+            description: "Returned when the resource does not exist.";
+            schema: {
+                json_schema: {
+                    type: STRING;
+                }
+            }
+        }
+    }
+};
+
+option go_package = "v1";
+
+message MetricsRequest {
+    string api = 1;
+}
+
+message MetricsResponse {
+    enum ErrorCode {
+        INTERNAL_ERROR = 0;
+        ENCODING_ERROR = 1;
+    }
+
+    message Metric {
+        string name = 1;
+        string type = 2;
+        string value = 3; // as json
+    }
+    ErrorCode error_code = 1;
+    repeated Metric metrics = 2;
+}
+
+service Metric {
+    rpc GetMetrics(MetricsRequest) returns (MetricsResponse) {
+        option (google.api.http) = {
+                                    get: "/v1/metrics"
+        };
+    };
+}

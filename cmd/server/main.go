@@ -22,5 +22,5 @@ func main() {
 
 	db.AutoMigrate(models.User{})
 
-	grpc.RunServer(context.Background(), &v1.HealthServer{}, v1.NewAuthServer(db), "7777")
+	grpc.RunServer(context.Background(), v1.NewAuthServer(db), &v1.HealthServer{}, v1.NewMetricServer(), "7777")
 }

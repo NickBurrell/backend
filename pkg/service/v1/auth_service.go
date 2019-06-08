@@ -1,13 +1,13 @@
 package v1
 
 import (
+	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/zero-frost/auth-service/models"
 	"github.com/zero-frost/auth-service/pkg/api/v1"
 	"golang.org/x/crypto/bcrypt"
-	"golang.org/x/net/context"
 	"log"
 	"regexp"
 	"time"

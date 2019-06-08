@@ -21,6 +21,10 @@ func RunServer(ctx context.Context, grpcPort, httpPort string) error {
 	if err := v1.RegisterAuthHandlerFromEndpoint(ctx, mux, "localhost:"+grpcPort, opts); err != nil {
 		log.Fatalf("failed to start HTTP gateway: %v", err)
 	}
+
+	if err := v1.RegisterMetricHandlerFromEndpoint(ctx, mux, "localhost:"+grpcPort, opts); err != nil {
+		log.Fatalf("failed to start HTTP gateway: %v", err)
+	}
 	srv := &http.Server{
 		Addr:    ":" + httpPort,
 		Handler: mux,

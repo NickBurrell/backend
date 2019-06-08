@@ -1,12 +1,14 @@
 package v1
 
 import (
-	"github.com/zero-frost/auth-service/pkg/api/v1"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
+	"context"
 	"log"
 	"sync"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+
+	"github.com/zero-frost/auth-service/pkg/api/v1"
 )
 
 type HealthServer struct {
