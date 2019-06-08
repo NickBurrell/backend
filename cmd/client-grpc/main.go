@@ -25,11 +25,11 @@ func main() {
 	// 	log.Fatalf("Error when calling CheckAuth: %s", err)
 	// }
 
-	// log.Printf("%s", response.OpaqueToken)
+	// log.Printf("%s", response.Token)
 	response, err := c.CreateUser(context.Background(), &v1.CreateUserRequest{
-		Username: "test",
-		Email:    "test@gmail.com",
-		Password: "test1234",
+		Username: "test_user_1",
+		Email:    "test_email@gmail.com",
+		Password: "test12345",
 	})
 	if err != nil {
 		log.Fatalf("Error when calling CheckAuth: %s", err)

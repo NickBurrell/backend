@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/zero-frost/auth-service/models"
@@ -23,12 +21,6 @@ func main() {
 	defer db.Close()
 
 	db.AutoMigrate(models.User{})
-	client := redis.NewClient(&redis.Options{
-		Addr:     "127.0.0.1:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-	pong, err := client.Ping().Result()
-	fmt.Println(pong, err)
-	grpc.RunServer(context.Background(), &v1.HealthServer{}, v1.NewServer(db, client), "7777")
+
+	grpc.RunServer(context.Background(), &v1.HealthServer{}, v1.NewAuthServer(db), "7777")
 }
