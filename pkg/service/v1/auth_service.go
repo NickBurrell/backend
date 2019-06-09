@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
-	"github.com/zero-frost/auth-service/models"
+	"github.com/zero-frost/auth-service/pkg/models"
 	"github.com/zero-frost/auth-service/pkg/api/v1"
 	"golang.org/x/crypto/bcrypt"
 	"log"
