@@ -34,25 +34,6 @@ option (
 
 option go_package = "v1";
 
-message LoginRequest {
-    string api = 1;
-    string username = 2;
-    string password = 3;
-}
-
-message LoginResponse {
-     enum ErrorCode {
-        BAD_REQUEST = 0;
-        INTERNAL_ERROR = 1;
-        INCORRECT_USERNAME_OR_PASSWORD = 2;
-        BLANK_USERNAME = 3;
-        BLANK_PASSWORD = 4;
-    }
-    string api = 1;
-    string token = 2;
-    ErrorCode error_code = 3;
-}
-
 message CreateUserRequest {
     string api = 1;
     string email = 2;
@@ -74,6 +55,45 @@ message CreateUserResponse {
     string api = 1;
     bool success = 2;
     ErrorCode error_code = 3;
+}
+
+message SetUserValidationRequest {
+    string api = 1;
+    string username = 2;
+    bool is_validated = 3;
+}
+
+message SetUserValidationResponse {
+    enum ErrorCode {
+        BAD_REQUEST = 0;
+        INTERNAL_ERROR = 1;
+        USER_DOES_NOT_EXIST = 2;
+        USER_ALREADY_VALIDATED = 3;
+    }
+
+    string api = 1;
+    bool success = 2;
+    ErrorCode error_code = 3;
+}
+
+message LoginRequest {
+    string api = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message LoginResponse {
+     enum ErrorCode {
+        BAD_REQUEST = 0;
+        INTERNAL_ERROR = 1;
+        INCORRECT_USERNAME_OR_PASSWORD = 2;
+        BLANK_USERNAME = 3;
+        BLANK_PASSWORD = 4;
+    }
+    string api = 1;
+    bool success = 2;
+    string token = 3;
+    ErrorCode error_code = 4;
 }
 
 service Auth {

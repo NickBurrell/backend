@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
-	"github.com/zero-frost/auth-service/pkg/models"
 	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/auth-service/pkg/config"
+	"github.com/zero-frost/auth-service/pkg/models"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"regexp"
@@ -34,17 +35,19 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-type Server struct {
-	db *gorm.DB
+type AuthServer struct {
+	db       *gorm.DB
+	settings config.ServerConfig
 }
 
-func NewAuthServer(db *gorm.DB) *Server {
-	return &Server{
-		db: db,
+func NewAuthServer(db *gorm.DB, settings config.ServerConfig) *AuthServer {
+	return &AuthServer{
+		db:       db,
+		settings: settings,
 	}
 }
 
-func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
+func (s *AuthServer) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.CreateUserResponse, error) {
 	var users []models.User
 	tx := s.db.Begin()
 	if err := tx.Where("username = ? OR email = ?", in.Username, in.Email).Find(&users).Error; len(users) != 0 {
@@ -53,12 +56,14 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 				tx.Rollback()
 				return &v1.CreateUserResponse{
 					Api:       "v1",
+					Success:   false,
 					ErrorCode: v1.CreateUserResponse_USERNAME_TAKEN,
 				}, fmt.Errorf("error: username already taken")
 			} else if elem.Email == in.Email {
 				tx.Rollback()
 				return &v1.CreateUserResponse{
 					Api:       "v1",
+					Success:   false,
 					ErrorCode: v1.CreateUserResponse_EMAIL_IN_USE,
 				}, fmt.Errorf("error: email already in use")
 			}
@@ -67,6 +72,7 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 		tx.Rollback()
 		return &v1.CreateUserResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
 		}, err
 	}
@@ -75,6 +81,7 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 		tx.Rollback()
 		return &v1.CreateUserResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.CreateUserResponse_INVALID_EMAIL,
 		}, fmt.Errorf("error: invalid email")
 	}
@@ -84,6 +91,7 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 		tx.Rollback()
 		return &v1.CreateUserResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
 		}, fmt.Errorf("error: failed to hash password")
 	}
@@ -97,6 +105,7 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 		tx.Rollback()
 		return &v1.CreateUserResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.CreateUserResponse_INTERNAL_ERROR,
 		}, fmt.Errorf("error: failed to create new user entry")
 	}
@@ -109,11 +118,12 @@ func (s *Server) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (*v1.
 	}, nil
 }
 
-func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginResponse, error) {
+func (s *AuthServer) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginResponse, error) {
 	var user models.User
 	if in.Username == "" {
 		return &v1.LoginResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.LoginResponse_BLANK_USERNAME,
 		}, fmt.Errorf("error: no username provided")
 	}
@@ -122,6 +132,7 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	if pass == "" {
 		return &v1.LoginResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.LoginResponse_BLANK_PASSWORD,
 		}, fmt.Errorf("error: no password provided")
 	}
@@ -131,6 +142,7 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 			{
 				return &v1.LoginResponse{
 					Api:       "v1",
+					Success:   false,
 					ErrorCode: v1.LoginResponse_INCORRECT_USERNAME_OR_PASSWORD,
 				}, fmt.Errorf("error: incorrect username or password")
 			}
@@ -138,6 +150,7 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 			{
 				return &v1.LoginResponse{
 					Api:       "v1",
+					Success:   false,
 					ErrorCode: v1.LoginResponse_BAD_REQUEST,
 				}, fmt.Errorf("error: internal server error")
 			}
@@ -147,6 +160,7 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pass)); err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.LoginResponse_INCORRECT_USERNAME_OR_PASSWORD,
 		}, fmt.Errorf("error: incorrect username or password")
 	}
@@ -206,13 +220,12 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	// 	}, fmt.Errorf("error: could not load secret")
 	// }
 
-	// jwt, err := token.SignedString(secret["jwt_secret"])
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS384, claims)
-	jwt, err := token.SignedString(jwtKey)
+	jwt, err := token.SignedString([]byte(s.settings.Secret))
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
 		}, fmt.Errorf("error: failed to encode JWT")
 	}
@@ -220,12 +233,18 @@ func (s *Server) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginRespo
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
+			Success:   false,
 			ErrorCode: v1.LoginResponse_INTERNAL_ERROR,
 		}, fmt.Errorf("error: failed to generate user token")
 	}
 
 	return &v1.LoginResponse{
-		Api:   "v1",
-		Token: jwt,
+		Api:     "v1",
+		Success: true,
+		Token:   jwt,
 	}, nil
+}
+
+func (s *AuthServer) GetSettings() *config.ServerConfig {
+	return &s.settings
 }

@@ -1,0 +1,4 @@
+* DONE Add SSL support [2/2] [100%] 
+  CLOSED: [2019-06-09 Sun 23:32] SCHEDULED: <2019-06-09 Sun>
+  - [X] Server
+  - [X] Client

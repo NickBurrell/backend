@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"errors"
+
 	"github.com/spf13/viper"
 
 	"github.com/go-yaml/yaml"
@@ -20,11 +22,15 @@ db:
   name: "./test.db"
   user: ""
   pass: ""
+
+server:
+  debug_mode: "true"
+  secret: "default_secret_please_change"
 `
 )
 
 // Config is the structure containing all information needed to configure and run the server.
-type DefaultConfig struct {
+type Config struct {
 	Port     int `yaml:"port"`
 	Database struct {
 		Kind         string `yaml:"type" mapstructure:"type"` // Database type (i.e. sqlite3, postgres, mysql, etc.)
@@ -33,16 +39,23 @@ type DefaultConfig struct {
 		Username     string `yaml:"user" mapstructure:"user"` // Database username
 		Password     string `yaml:"pass" mapstructure:"pass"` // Database password
 	} `yaml:"db" mapstructure:"db"`
+	ServerSettings ServerConfig `yaml:"server" mapstructure:"server"`
 }
 
-func GetConfig(path, filename string) (*DefaultConfig, error) {
+// ServerConfig contains all information relevent to the server post-initialization
+type ServerConfig struct {
+	DebugMode bool   `yaml:"debug_mode" mapstructure:"debug_mode"` // Current server mode
+	Secret    string `yaml:"secret" mapstructure:"secret"`         // JWT Secret
+}
+
+func GetConfig(path, filename string) (*Config, error) {
 	if !tryConfig(path, filename) {
 		log.Printf("Failed to load config file, attempting to generate file.\n")
 	}
-	if err := generateDefaultConfig(path, filename, true); err != nil {
+	if err := generateConfig(path, filename, true); err != nil {
 		log.Printf("failed to load config file, resorting to default\n")
 
-		c := DefaultConfig{}
+		c := Config{}
 		if err := yaml.Unmarshal([]byte(defaultConfig), &c); err != nil {
 			panic(err)
 		}
@@ -57,13 +70,21 @@ func GetConfig(path, filename string) (*DefaultConfig, error) {
 			"user": "",
 			"pass": "",
 		},
+		"server": map[string]interface{}{
+			"secret": "default_secret_please_change",
+		},
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	c := DefaultConfig{}
+	c := Config{}
 	err = v.Unmarshal(&c)
+
+	if c.ServerSettings.Secret == "default_secret_please_change" && !c.ServerSettings.DebugMode {
+		panic(errors.New("secret left as default. Please change either the secret, or change to testing mode"))
+	}
+
 	return &c, err
 
 }
@@ -75,7 +96,7 @@ func tryConfig(path, filename string) bool {
 	return true
 }
 
-func generateDefaultConfig(path, filename string, force bool) error {
+func generateConfig(path, filename string, force bool) error {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if force {
 			os.Mkdir(path, 0755)

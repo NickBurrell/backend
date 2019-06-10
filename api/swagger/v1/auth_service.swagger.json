@@ -151,6 +151,10 @@
         "api": {
           "type": "string"
         },
+        "success": {
+          "type": "boolean",
+          "format": "boolean"
+        },
         "token": {
           "type": "string"
         },
