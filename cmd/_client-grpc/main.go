@@ -11,12 +11,13 @@ import (
 func main() {
 
 	var conn *grpc.ClientConn
-	creds, err := credentials.NewClientTLSFromFile("cert/server.crt", "")
+	_, err := credentials.NewClientTLSFromFile("cert/server.crt", "")
 	if err != nil {
 		log.Fatalf("could not load tls cert: %s", err)
 	}
 
-	conn, err = grpc.Dial("localhost:7777", grpc.WithTransportCredentials(creds))
+	// conn, err = grpc.Dial("localhost:7777", grpc.WithTransportCredentials(creds))
+	conn, err = grpc.Dial("localhost:7777", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)
 	}

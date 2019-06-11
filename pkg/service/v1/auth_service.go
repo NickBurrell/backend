@@ -37,10 +37,10 @@ type Claims struct {
 
 type AuthServer struct {
 	db       *gorm.DB
-	settings config.ServerConfig
+	settings *config.ServerConfig
 }
 
-func NewAuthServer(db *gorm.DB, settings config.ServerConfig) *AuthServer {
+func NewAuthServer(db *gorm.DB, settings *config.ServerConfig) *AuthServer {
 	return &AuthServer{
 		db:       db,
 		settings: settings,
@@ -221,7 +221,7 @@ func (s *AuthServer) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginR
 	// }
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS384, claims)
-	jwt, err := token.SignedString([]byte(s.settings.Secret))
+	jwt, err := token.SignedString([]byte("test"))
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
@@ -246,5 +246,5 @@ func (s *AuthServer) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginR
 }
 
 func (s *AuthServer) GetSettings() *config.ServerConfig {
-	return &s.settings
+	return s.settings
 }

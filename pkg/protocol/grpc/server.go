@@ -39,7 +39,6 @@ func RunServer(ctx context.Context, c *config.Config, authAPI v1.AuthServer, hea
 
 	creds, err := credentials.NewServerTLSFromFile("cert/server.crt", "cert/server.key")
 
-	log.Printf("%v\n", creds)
 	if err != nil {
 		log.Fatalf("Failed to load SSL while in production mode. '%v'", err)
 

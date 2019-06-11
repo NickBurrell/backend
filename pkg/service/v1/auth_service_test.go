@@ -17,6 +17,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
 	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/auth-service/pkg/config"
 )
 
 type Suite struct {
@@ -54,7 +55,7 @@ func Test_AuthService_Create(t *testing.T) {
 		t.Fatalf("error: failed to create gorm database connection from mock, '%s'", err)
 	}
 
-	s := NewAuthServer(gormDB)
+	s := NewAuthServer(gormDB, &config.ServerConfig{})
 
 	type args struct {
 		ctx context.Context
@@ -193,7 +194,7 @@ func Test_AuthService_Login(t *testing.T) {
 		t.Fatalf("error: failed to create gorm database connection from mock, '%s'", err)
 	}
 
-	s := NewAuthServer(gormDB)
+	s := NewAuthServer(gormDB, &config.ServerConfig{})
 
 	type args struct {
 		ctx context.Context
