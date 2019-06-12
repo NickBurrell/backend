@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

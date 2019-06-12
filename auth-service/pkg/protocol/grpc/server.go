@@ -15,12 +15,12 @@ import (
 
 	"github.com/rcrowley/go-metrics"
 
-	"github.com/zero-frost/auth-service/pkg/config"
-	middleware "github.com/zero-frost/auth-service/pkg/middleware/metrics"
+	"github.com/zero-frost/backend/auth-service/pkg/config"
+	middleware "github.com/zero-frost/backend/auth-service/pkg/middleware/metrics"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 
-	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
 )
 
 func RunServer(ctx context.Context, c *config.Config, authAPI v1.AuthServer, healthAPI v1.HealthServer, metricsAPI v1.MetricServer) error {

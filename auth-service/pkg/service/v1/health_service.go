@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 
-	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
 )
 
 type HealthServer struct {

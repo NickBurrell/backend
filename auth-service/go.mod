@@ -1,4 +1,4 @@
-module github.com/zero-frost/auth-service
+module github.com/zero-frost/backend/auth-service
 
 go 1.12
 

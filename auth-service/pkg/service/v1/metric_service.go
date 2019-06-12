@@ -7,7 +7,7 @@ import (
 
 	"github.com/rcrowley/go-metrics"
 
-	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
 )
 
 type MetricServer struct{}

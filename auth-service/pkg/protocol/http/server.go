@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/zero-frost/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
 	"google.golang.org/grpc"
 	"log"
 	"net/http"

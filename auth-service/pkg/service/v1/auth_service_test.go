@@ -16,8 +16,8 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 
-	"github.com/zero-frost/auth-service/pkg/api/v1"
-	"github.com/zero-frost/auth-service/pkg/config"
+	"github.com/zero-frost/backend/auth-service/pkg/api/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/config"
 )
 
 type Suite struct {

@@ -8,11 +8,11 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/zero-frost/auth-service/pkg/config"
-	"github.com/zero-frost/auth-service/pkg/models"
-	"github.com/zero-frost/auth-service/pkg/protocol/grpc"
-	"github.com/zero-frost/auth-service/pkg/protocol/http"
-	"github.com/zero-frost/auth-service/pkg/service/v1"
+	"github.com/zero-frost/backend/auth-service/pkg/config"
+	"github.com/zero-frost/backend/auth-service/pkg/models"
+	"github.com/zero-frost/backend/auth-service/pkg/protocol/grpc"
+	"github.com/zero-frost/backend/auth-service/pkg/protocol/http"
+	"github.com/zero-frost/backend/auth-service/pkg/service/v1"
 )
 
 func main() {
