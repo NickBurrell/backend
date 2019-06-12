@@ -1,0 +1,29 @@
+{
+  "name": "dashboard-service",
+  "version": "1.0.0",
+  "description": "Dash system for Synthesis Matchmaker analytics",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "bundle exec rspec spec",
+    "jstest": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.gitlab.com/synthesis-backend/dashboard-service"
+  },
+  "author": "Nicholas Burrell",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "enzyme": "^3.8.0",
+    "grunt": "^1.0.3",
+    "mocha": "^5.2.0",
+    "webpack": "^4.29.0"
+  },
+  "dependencies": {
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  }
+}

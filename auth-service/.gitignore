@@ -1,0 +1,9 @@
+bin/*
+vendor/*
+
+*.db
+
+*.pem
+*.crt
+*.key
+*.csr
