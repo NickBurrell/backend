@@ -2,3 +2,8 @@
   CLOSED: [2019-06-09 Sun 23:32] SCHEDULED: <2019-06-09 Sun>
   - [X] Server
   - [X] Client
+* TODO Add Docker Support [1/3] [33%] 
+  - [X] Create Dockerfile
+  - [ ] Create Docker Composer deployment
+  - [ ] Create Kubernetes deployment
+  SCHEDULED: <2019-06-11 Tue>

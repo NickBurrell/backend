@@ -1,0 +1,15 @@
+version: '3'
+services:
+  auth:
+    container_name: auth_service
+    tty: true
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "5300:5300"
+      - "8080:8080"
+    expose:
+      - "5300"
+      - "8080"
+    hostname: test.auth.dev
