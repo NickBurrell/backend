@@ -16,7 +16,7 @@ import (
 	"github.com/rcrowley/go-metrics"
 
 	"github.com/zero-frost/backend/auth-service/pkg/config"
-	middleware "github.com/zero-frost/backend/auth-service/pkg/middleware/metrics"
+	middleware "github.com/zero-frost/backend/pkg/middleware/metrics"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware"
 
