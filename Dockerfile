@@ -6,10 +6,10 @@ WORKDIR $GOPATH/src/github/zero-frost/auth-service
 
 COPY . .
 
-RUN go get -d -v ./...
+RUN GO111MODULE=on go get -d -v ./...
 
-RUN go install -v ./...
+RUN GO111MODULE=on go install -v ./...
 
-EXPOSE 7777
+EXPOSE 5300
 
 CMD ["auth-service"]

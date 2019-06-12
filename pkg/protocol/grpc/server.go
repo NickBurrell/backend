@@ -25,7 +25,7 @@ import (
 
 func RunServer(ctx context.Context, c *config.Config, authAPI v1.AuthServer, healthAPI v1.HealthServer, metricsAPI v1.MetricServer) error {
 	// lis, err := net.Listen("tcp", ":"+string(c.Port))
-	lis, err := net.Listen("tcp", "localhost:7777")
+	lis, err := net.Listen("tcp", ":5300")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
