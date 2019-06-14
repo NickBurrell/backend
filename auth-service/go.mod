@@ -19,6 +19,7 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
+	github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99
 	golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
 	golang.org/x/net v0.0.0-20190607181551-461777fb6f67
 	google.golang.org/genproto v0.0.0-20190605220351-eb0b1bdb6ae6

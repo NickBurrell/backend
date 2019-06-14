@@ -226,7 +226,10 @@ github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhe
 github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0HrGL1Y=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
+github.com/zero-frost/auth-service v0.0.0-20190612233023-c68204883f99 h1:6I6z8LKsxvAfvVcfOepaIIDbjP74nbBzA7IoRNOJUcA=
 github.com/zero-frost/backend v0.0.0-20190612231948-dabb5b822c74 h1:98qIleTyP0Pzv8RLs6ViGmxkPdm7Labcp4qOU1zRoUs=
+github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99 h1:gCYjdS2y34fmrqCJAasx0CVsA0Ryk8SsDv/WhL+dy80=
+github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99/go.mod h1:nAv1+OrZy4l9PZsNFAXSq8BzzH4T6AyIEmSwZbCuYCs=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=
