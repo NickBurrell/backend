@@ -229,6 +229,7 @@ github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
 github.com/zero-frost/auth-service v0.0.0-20190612233023-c68204883f99 h1:6I6z8LKsxvAfvVcfOepaIIDbjP74nbBzA7IoRNOJUcA=
+github.com/zero-frost/auth-service v0.0.0-20190615000629-673ee39d18ce h1:9KyAPRvyMOyHOXnVwvR/cEhdoVItcKp3L8MTI0JX0xQ=
 github.com/zero-frost/backend v0.0.0-20190612231948-dabb5b822c74 h1:98qIleTyP0Pzv8RLs6ViGmxkPdm7Labcp4qOU1zRoUs=
 github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99 h1:gCYjdS2y34fmrqCJAasx0CVsA0Ryk8SsDv/WhL+dy80=
 github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99/go.mod h1:nAv1+OrZy4l9PZsNFAXSq8BzzH4T6AyIEmSwZbCuYCs=

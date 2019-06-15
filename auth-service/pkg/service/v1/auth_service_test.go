@@ -82,12 +82,12 @@ func Test_AuthService_Create(t *testing.T) {
 			},
 			mock: func() {
 				mock.ExpectBegin()
-				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password"}))
+				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password", "is_verified"}))
 				mock.ExpectExec(regexp.QuoteMeta(
-					`INSERT INTO "users" ("email","username","password") `+
-						`VALUES ($1,$2,$3) `+
+					`INSERT INTO "users" ("email","username","password","is_verified") `+
+						`VALUES ($1,$2,$3,$4) `+
 						`RETURNING "users".*`)).
-					WithArgs("test_email@gmail.com", "test_user_1", sqlmock.AnyArg()).
+					WithArgs("test_email@gmail.com", "test_user_1", sqlmock.AnyArg(), false).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 				mock.ExpectCommit()
 			},
@@ -110,7 +110,7 @@ func Test_AuthService_Create(t *testing.T) {
 			},
 			mock: func() {
 				mock.ExpectBegin()
-				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password"}).AddRow("test_user_2", "test_email@gmail.com", ""))
+				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password", "is_verified"}).AddRow("test_user_2", "test_email@gmail.com", "", false))
 				mock.ExpectRollback()
 			},
 			want: &v1.CreateUserResponse{
@@ -132,7 +132,7 @@ func Test_AuthService_Create(t *testing.T) {
 			},
 			mock: func() {
 				mock.ExpectBegin()
-				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password"}).AddRow("test_user_1", "test_email@_2gmail.com", ""))
+				mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE (username = $1 OR email = $2)")).WithArgs("test_user_1", "test_email@gmail.com").WillReturnRows(sqlmock.NewRows([]string{"username", "email", "password", "is_verified"}).AddRow("test_user_1", "test_email@_2gmail.com", "", false))
 				mock.ExpectRollback()
 			},
 			want: &v1.CreateUserResponse{

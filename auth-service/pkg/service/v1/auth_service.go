@@ -221,7 +221,7 @@ func (s *AuthServer) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginR
 	// }
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS384, claims)
-	jwt, err := token.SignedString([]byte("test"))
+	jwt, err := token.SignedString([]byte("test_key"))
 	if err != nil {
 		return &v1.LoginResponse{
 			Api:       "v1",
