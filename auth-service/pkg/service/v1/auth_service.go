@@ -110,7 +110,7 @@ func (s *AuthServer) CreateUser(ctx context.Context, in *v1.CreateUserRequest) (
 		}, fmt.Errorf("error: failed to create new user entry")
 	}
 
-	log.Printf("Sucessfully created user %s", in.Username)
+	log.Printf("Successfully created user %s", in.Username)
 	tx.Commit()
 	return &v1.CreateUserResponse{
 		Api:     "v1",

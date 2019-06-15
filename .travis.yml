@@ -14,7 +14,10 @@ install: true
 
 before_script:
   - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+  - go get github.com/gojp/goreportcard/cmd/goreportcard-cli
 
 script:
   - golangci-lint run
   - go test -v -race ./...
+  - go test -v -race ./auth-service/...
+  - go test -v -race ./matchmaking-service/...

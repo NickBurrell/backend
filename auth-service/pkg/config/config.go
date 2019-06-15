@@ -42,7 +42,7 @@ type Config struct {
 	ServerSettings ServerConfig `yaml:"server" mapstructure:"server"`
 }
 
-// ServerConfig contains all information relevent to the server post-initialization
+// ServerConfig contains all information relevant to the server post-initialization
 type ServerConfig struct {
 	DebugMode bool   `yaml:"debug_mode" mapstructure:"debug_mode"` // Current server mode
 	Secret    string `yaml:"secret" mapstructure:"secret"`         // JWT Secret

@@ -16,7 +16,7 @@ func splitMethod(s string) string {
 	return splitPreamble[1] + "." + strings.ToLower(splitPreamble[2]) + "." + strcase.ToSnake(splitMethodName[2])
 }
 
-// TODO: Implemenet persistant logs
+// TODO: Implement persistent logs
 func MetricsUnaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 

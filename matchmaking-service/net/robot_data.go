@@ -36,13 +36,13 @@ func Unmarshal(data []byte, r *RobotData) error {
 		r.DIO[i].RelayReverse = binary.BigEndian.Uint32(data[offset+4 : offset+8])
 		r.DIO[i].DigitalOutput = binary.BigEndian.Uint32(data[offset+8 : offset+12])
 
-		for j, _ := range dio.PWMValues {
+		for j := range dio.PWMValues {
 			pwmOffset := offset + 12 + (4 * j)
 			r.DIO[i].PWMValues[j] = math.Float32frombits(
 				binary.BigEndian.Uint32(data[pwmOffset : pwmOffset+4]))
 		}
 
-		for k, _ := range dio.CANValues {
+		for k := range dio.CANValues {
 			canOffset := offset + 52 + (4 * k)
 			r.DIO[i].CANValues[k] = math.Float32frombits(
 				binary.BigEndian.Uint32(data[canOffset : canOffset+4]))

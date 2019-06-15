@@ -9,7 +9,7 @@ var sampleData = []byte{
 
 var sampleRobot = RobotData{
 	DIO: [2]DIOData{
-		DIOData{
+		{
 			RelayForward:  1,
 			RelayReverse:  0,
 			DigitalOutput: 255,
@@ -20,7 +20,7 @@ var sampleRobot = RobotData{
 				.5, .5, 0, 0, 1, 1, 0, 0, 1.5, 1.5,
 			},
 		},
-		DIOData{
+		{
 			RelayForward:  0,
 			RelayReverse:  1,
 			DigitalOutput: 1024,

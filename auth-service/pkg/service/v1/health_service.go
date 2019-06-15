@@ -29,11 +29,11 @@ func (s *HealthServer) Check(ctx context.Context, in *v1.HealthCheckRequest) (*v
 		return &v1.HealthCheckResponse{
 			Status: v1.HealthCheckResponse_SERVING,
 		}, nil
-		if status, ok := s.statusMap[in.Service]; ok {
-			return &v1.HealthCheckResponse{
-				Status: status,
-			}, nil
-		}
+	}
+	if status, ok := s.statusMap[in.Service]; ok {
+		return &v1.HealthCheckResponse{
+			Status: status,
+		}, nil
 	}
 	return nil, grpc.Errorf(codes.NotFound, "unknownservice")
 }

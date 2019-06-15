@@ -79,6 +79,8 @@ github.com/gocql/gocql v0.0.0-20190301043612-f6df8288f9b4/go.mod h1:4Fw1eo5iaEhD
 github.com/gogo/protobuf v1.1.1/go.mod h1:r8qH/GZQm5c6nD/R0oafs1akxWv10x8SbQlK7atdtwQ=
 github.com/gogo/protobuf v1.2.0/go.mod h1:r8qH/GZQm5c6nD/R0oafs1akxWv10x8SbQlK7atdtwQ=
 github.com/gogo/protobuf v1.2.1/go.mod h1:hp+jE20tsWTFYpLwKvXlhS1hjn+gTNwPg2I6zVXpSg4=
+github.com/gojp/goreportcard v0.0.0-20190515002622-515e065d1083 h1:wgOt0Hbg6eVvqjxnUmyZaMaNVztud//gsTnQzOy7ikg=
+github.com/gojp/goreportcard v0.0.0-20190515002622-515e065d1083/go.mod h1:/DA2Xpp+OaR3EHafQSnT9SKOfbG2NPQR/qp6Qr8AgIw=
 github.com/golang-migrate/migrate/v4 v4.4.0 h1:bQVSVUJCZkAf6ci1J4aUNFO0FyXVoncZvHEFCVD2ezE=
 github.com/golang-migrate/migrate/v4 v4.4.0/go.mod h1:SzAcz2l+yDJVhQC7fwiF7T2MAFPMIkigJz98klRJ4OE=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b h1:VKtxabqXZkF25pY9ekfRL6a582T4P37/31XEstQ5p58=
@@ -230,6 +232,7 @@ github.com/zero-frost/auth-service v0.0.0-20190612233023-c68204883f99 h1:6I6z8LK
 github.com/zero-frost/backend v0.0.0-20190612231948-dabb5b822c74 h1:98qIleTyP0Pzv8RLs6ViGmxkPdm7Labcp4qOU1zRoUs=
 github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99 h1:gCYjdS2y34fmrqCJAasx0CVsA0Ryk8SsDv/WhL+dy80=
 github.com/zero-frost/backend v0.0.0-20190612233023-c68204883f99/go.mod h1:nAv1+OrZy4l9PZsNFAXSq8BzzH4T6AyIEmSwZbCuYCs=
+github.com/zero-frost/backend v0.0.0-20190614234619-c90c4be352dd h1:t4RLTO+aRCp5Qs9PPgmXy/N/NF7E6e1yS4fRogGV6FE=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=

@@ -25,7 +25,8 @@ func main() {
 		_ = http.RunServer(context.Background(), "7777", "8080")
 	}()
 	// TODO: create function to generate db from config
-	c, err := config.GetConfig("./config", "env.yml")
+	c, _ := config.GetConfig("./config", "env.yml")
+
 	db, err := gorm.Open(c.Database.Kind, c.Database.DatabaseName)
 	if err != nil {
 		panic(err)

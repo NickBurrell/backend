@@ -7,6 +7,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.7.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
+	github.com/gojp/goreportcard v0.0.0-20190515002622-515e065d1083 // indirect
 	github.com/golang-migrate/migrate/v4 v4.4.0
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.1
